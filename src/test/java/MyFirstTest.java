@@ -8,7 +8,11 @@ public class MyFirstTest extends TestConfig {
     @Test
     public void myFirstTest() {
         given().
+                log().
+                all().
         when().get("videogames/1").
-        then().statusCode(200);
+        then().
+                log().
+                all();
     }
 }
