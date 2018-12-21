@@ -20,6 +20,16 @@ public class VideoGameDBTests extends TestConfig {
     }
 
     @Test
+    public void getSingleGame() {
+        given().
+                spec(videoGame_requestSpec).
+                pathParam("videoGameId", 11).
+        when().
+                get(EndPoint.SINGLE_VIDEOGAME).
+        then();
+    }
+
+    @Test
     public void createNewGameByJSON() {
 
         String gameBodyJson = "{\n" +
@@ -71,9 +81,10 @@ public class VideoGameDBTests extends TestConfig {
 
         given().
                 spec(videoGame_requestSpec).
+                pathParam("videoGameId", 11).
                 body(gameBodyJson).
         when().
-                put("/videogames/11").
+                put(EndPoint.SINGLE_VIDEOGAME).
         then();
     }
 
@@ -81,8 +92,9 @@ public class VideoGameDBTests extends TestConfig {
     public void deleteGame() {
         given().
                 spec(videoGame_requestSpec).
+                pathParam("videoGameId", 11).
         when().
-                delete("/videogames/11").
+                delete(EndPoint.SINGLE_VIDEOGAME).
         then();
     }
 }
