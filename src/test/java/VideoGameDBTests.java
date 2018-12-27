@@ -3,6 +3,8 @@ import config.TestConfig;
 import org.testng.annotations.Test;
 
 import static io.restassured.RestAssured.*;
+import static io.restassured.matcher.RestAssuredMatchers.matchesXsdInClasspath;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 public class VideoGameDBTests extends TestConfig {
 
@@ -23,7 +25,7 @@ public class VideoGameDBTests extends TestConfig {
     public void getSingleGame() {
         given().
                 spec(videoGame_requestSpec).
-                pathParam("videoGameId", 11).
+                pathParam("videoGameId", 10).
         when().
                 get(EndPoint.SINGLE_VIDEOGAME).
         then();
@@ -96,5 +98,41 @@ public class VideoGameDBTests extends TestConfig {
         when().
                 delete(EndPoint.SINGLE_VIDEOGAME).
         then();
+    }
+
+    @Test
+    public void testVideoGameSerialisationByJSON() {
+
+        VideoGame videoGame = new VideoGame("15", "shooter", "2018-12-12", "Fifa 20",
+                "Kids", "89");
+
+        given().
+                spec(videoGame_requestSpec).
+                body(videoGame).
+        when().
+                post(EndPoint.VIDEOGAMES).
+        then();
+    }
+
+    @Test
+    public void testVideoGameSchemaXML() {
+        given().
+                spec(videoGame_requestSpec).
+                pathParam("videoGameId", 5).
+        when().
+                get(EndPoint.SINGLE_VIDEOGAME).
+        then().
+                body(matchesXsdInClasspath("VideoGame.xsd"));
+    }
+
+    @Test
+    public void testVideoGameSchemaJSON() {
+        given().
+                spec(videoGame_requestSpec).
+                pathParam("videoGameId", 5).
+        when().
+                get(EndPoint.SINGLE_VIDEOGAME).
+        then().
+                body(matchesJsonSchemaInClasspath("VideoGameJsonSchema.json"));
     }
 }
