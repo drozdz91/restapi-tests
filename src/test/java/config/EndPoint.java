@@ -9,4 +9,5 @@ public interface EndPoint {
     // Endpoints for Football API
     String COMPETITIONS_PL_MATCHES = "competitions/PL/matches";
     String TEAMS_FOR_ONE_COMPETITION = "competitions/{competitionId}/teams";
+    String PARTICULAR_TEAM = "teams/{teamId}";
 }
