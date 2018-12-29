@@ -3,6 +3,7 @@ import config.TestConfig;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -83,5 +84,47 @@ public class GPathJSONTests extends TestConfig {
 
         int sumOfShirtNumbers = response.path("squad.collect { it.shirtNumber }.sum()");
         System.out.println(sumOfShirtNumbers);
+    }
+
+    @Test
+    public void extractMapOfObjectWithFindAndFindAll() {
+
+        String position = "Defender";
+        String nationality = "Argentina";
+
+        Response response =
+        given().
+                spec(football_requestSpec).
+                pathParam("teamId", 66).
+        when().
+                get(EndPoint.PARTICULAR_TEAM).
+        then().
+                extract().response();
+
+        Map<String,?> playerOfCertainPosition = response.path(
+                "squad.findAll { it.position == '%s' }.find { it.nationality == '%s' }",
+                position, nationality);
+        System.out.println(playerOfCertainPosition);
+    }
+
+    @Test
+    public void extractMultiplePlayers() {
+
+        String position = "Defender";
+        String nationality = "England";
+
+        Response response =
+        given().
+                spec(football_requestSpec).
+                pathParam("teamId", 66).
+        when().
+                get(EndPoint.PARTICULAR_TEAM).
+        then().
+                extract().response();
+
+        ArrayList<Map<String,?>> allPlayersCertainNation = response.path(
+                "squad.findAll { it.position == '%s' }.findAll { it.nationality == '%s' }",
+                position, nationality);
+        System.out.println(allPlayersCertainNation);
     }
 }
