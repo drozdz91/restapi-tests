@@ -24,8 +24,8 @@ public class TestConfig {
                 setBaseUri("http://localhost").
                 setPort(8080).
                 setBasePath("/app/").
-                addHeader("Content-type", "application/json").
-                addHeader("Accept", "application/json").
+                addHeader("Content-type", "application/xml").
+                addHeader("Accept", "application/xml").
                 build();
 
         football_requestSpec = new RequestSpecBuilder().
